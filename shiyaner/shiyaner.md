@@ -355,34 +355,6 @@
         }  
         }
     ![alt text](./imge/image-16.png)
-- 计算每天的订单数量，并显示7天移动平均值。
- 
-        {  
-        "size": 0,  
-        "aggs": {
-            "sales_over_time": {
-                "date_histogram": {
-                    "field": "date",
-                    "calendar_interval": "day",
-                    "format": "yyyy-MM-dd"
-                },
-                "aggs":{
-                    "count":{
-                        "value_count":{
-                            "field":"order_id"
-                        }
-                    }
-                },
-                "moving_avg_sales": {
-          "moving_avg": {
-            "buckets_path": "total_sales",
-            "window": 7  
-          }
-        }
-
-            }
-         } 
-        }
 - 比较本月销售额与上月销售额的差异。
  
         {  
@@ -408,42 +380,4 @@
         }  
         }
     ![alt text](./imge/image-17.png)
-- 计算每周的总销售额，并找出销售额增长最快的一周。
- 
-        {  
-        "size": 0,  
-        "aggs": {  
-            "sales_per_week": {  
-            "date_histogram": {  
-                "field": "order_date",  
-                "calendar_interval": "week",  
-                "format": "yyyy-'W'ww",  
-                "order": {  
-                "_key": "asc"  
-                }  
-            },  
-            "aggs": {  
-                "total_sales": {  
-                "sum": {  
-                    "field": "total_amount"  
-                }  
-                },  
-                "sales_growth": {  
-                "bucket_script": {  
-                    "buckets_path": {  
-                    "previous_sales": "sales_per_week>_2.total_sales",
-                    "current_sales": "total_sales"  
-                    },  
-                    "script": "params.current_sales - params.previous_sales"  
-                }  
-                }  
-            }  
-            },  
-            "max_growth_week": {  
-            "max_bucket": {  
-                "buckets_path": "sales_per_week>sales_growth"  
-            }  
-            }  
-        }  
-        }
 ## 三、问题及解决方法
